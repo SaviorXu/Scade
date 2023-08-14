@@ -1,0 +1,344 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ACTIVATE
+    AND
+    ARROW
+    ASSERT
+    ASSUME
+    AT
+    AUTOMATON
+    BODY
+    CASE
+    CHAR
+    CLOCK
+    COMMA
+    CURRENT
+    DEFAULT
+    DIV
+    DIVIDE
+    DO
+    ELSE
+    ELSIF
+    EMIT
+    END
+    ENUM
+    EVERY
+    EXPONENT
+    EXTERN
+    FBY
+    FINAL
+    FLATTEN
+    FLOAT
+    FLOAT32
+    FLOAT64
+    FOLD
+    FOLDI
+    FOLDW
+    FOLDWI
+    FUNCTION
+    GREATER
+    GREATEREQU
+    GROUP
+    GUARANTEE
+    HASHTAG
+    IF
+    INCLUDE
+    INITIAL
+    INT
+    INT16
+    INT64
+    INTCONST
+    INTEGER
+    IS
+    LAND
+    LAST
+    LBPARENTHESE
+    LBRACKET
+    LESS
+    LESSEQU
+    LET
+    LNOT
+    LOR
+    LPARENTHESE
+    LSHIFT
+    LSL
+    LSR
+    LV6ID
+    LV6IDREF
+    LXOR
+    MAKE
+    MAP
+    MAPFOLD
+    MAPFOLDI
+    MAPFOLDW
+    MAPFOLDWI
+    MAPI
+    MAPW
+    MAPWI
+    MATCH
+    MERGE
+    MINUS
+    MOD
+    MODEL
+    NEEDS
+    NODE
+    NOEQU
+    NOR
+    NOT
+    NUMERIC
+    OF
+    OPEN
+    OR
+    PACKAGE
+    PLUS
+    POINT
+    PRE
+    PROBE
+    PROVIDES
+    RBPARENTHESE
+    RBRACKET
+    REAL
+    REALCONST
+    RESTART
+    RESUME
+    RETURNS
+    REVERSE
+    RPARENTHESE
+    RSHIFT
+    SENSOR
+    SHIFT
+    SIG
+    SIGNED
+    SINGLEQUOTE
+    SPECIALIZE
+    STAR
+    STATE
+    STEP
+    STRUCT
+    SURPLUS
+    SYNCHRO
+    TEL
+    THEN
+    TIMES
+    TPOINT
+    TRANSPOSE
+    TYPE
+    UINT16
+    UINT32
+    UINT64
+    UINT8
+    UNLESS
+    UNSAFE
+    UNSIGNED
+    UNTIL
+    USES
+    VAR
+    VERTICALBAR
+    WHEN
+    WHERE
+    WITH
+    XOR
+
+Grammar
+
+Rule 0     S' -> Program
+Rule 1     Program -> Decls_zero_or_mode
+Rule 2     Decls_zero_or_mode -> Decls Decls_zero_or_mode
+Rule 3     Decls_zero_or_mode -> empty
+Rule 4     Decls -> Const_block
+Rule 5     Const_block -> CONST Const_decl SEMICOLON Const_block
+Rule 6     Const_block -> empty
+Rule 7     Const_decl -> Interface_status id COLON Type_expr EQU Expr
+Rule 8     Const_decl -> Interface_status id COLON Type_expr
+Rule 9     Interface_status -> Visibility_zero_or_one External
+Rule 10    Interface_status -> Visibility_zero_or_one
+Rule 11    Visibility_zero_or_one -> Visibility
+Rule 12    Visibility_zero_or_one -> empty
+Rule 13    External -> IMPORTED
+Rule 14    Visibility -> PRIVATE
+Rule 15    Visibility -> PUBLIC
+Rule 16    Type_expr -> BOOL
+Rule 17    Type_expr -> INT32
+Rule 18    Type_expr -> INT8
+Rule 19    Expr -> Atom
+Rule 20    Atom -> Bool_atom
+Rule 21    Atom -> INTEGERNUM
+Rule 22    Bool_atom -> TRUE
+Rule 23    Bool_atom -> FALSE
+Rule 24    empty -> <empty>
+
+Terminals, with rules where they appear
+
+ACTIVATE             : 
+AND                  : 
+ARROW                : 
+ASSERT               : 
+ASSUME               : 
+AT                   : 
+AUTOMATON            : 
+BODY                 : 
+BOOL                 : 16
+CASE                 : 
+CHAR                 : 
+CLOCK                : 
+COLON                : 7 8
+COMMA                : 
+CONST                : 5
+CURRENT              : 
+DEFAULT              : 
+DIV                  : 
+DIVIDE               : 
+DO                   : 
+ELSE                 : 
+ELSIF                : 
+EMIT                 : 
+END                  : 
+ENUM                 : 
+EQU                  : 7
+EVERY                : 
+EXPONENT             : 
+EXTERN               : 
+FALSE                : 23
+FBY                  : 
+FINAL                : 
+FLATTEN              : 
+FLOAT                : 
+FLOAT32              : 
+FLOAT64              : 
+FOLD                 : 
+FOLDI                : 
+FOLDW                : 
+FOLDWI               : 
+FUNCTION             : 
+GREATER              : 
+GREATEREQU           : 
+GROUP                : 
+GUARANTEE            : 
+HASHTAG              : 
+IF                   : 
+IMPORTED             : 13
+INCLUDE              : 
+INITIAL              : 
+INT                  : 
+INT16                : 
+INT32                : 17
+INT64                : 
+INT8                 : 18
+INTCONST             : 
+INTEGER              : 
+INTEGERNUM           : 21
+IS                   : 
+LAND                 : 
+LAST                 : 
+LBPARENTHESE         : 
+LBRACKET             : 
+LESS                 : 
+LESSEQU              : 
+LET                  : 
+LNOT                 : 
+LOR                  : 
+LPARENTHESE          : 
+LSHIFT               : 
+LSL                  : 
+LSR                  : 
+LV6ID                : 
+LV6IDREF             : 
+LXOR                 : 
+MAKE                 : 
+MAP                  : 
+MAPFOLD              : 
+MAPFOLDI             : 
+MAPFOLDW             : 
+MAPFOLDWI            : 
+MAPI                 : 
+MAPW                 : 
+MAPWI                : 
+MATCH                : 
+MERGE                : 
+MINUS                : 
+MOD                  : 
+MODEL                : 
+NEEDS                : 
+NODE                 : 
+NOEQU                : 
+NOR                  : 
+NOT                  : 
+NUMERIC              : 
+OF                   : 
+OPEN                 : 
+OR                   : 
+PACKAGE              : 
+PLUS                 : 
+POINT                : 
+PRE                  : 
+PRIVATE              : 14
+PROBE                : 
+PROVIDES             : 
+PUBLIC               : 15
+RBPARENTHESE         : 
+RBRACKET             : 
+REAL                 : 
+REALCONST            : 
+RESTART              : 
+RESUME               : 
+RETURNS              : 
+REVERSE              : 
+RPARENTHESE          : 
+RSHIFT               : 
+SEMICOLON            : 5
+SENSOR               : 
+SHIFT                : 
+SIG                  : 
+SIGNED               : 
+SINGLEQUOTE          : 
+SPECIALIZE           : 
+STAR                 : 
+STATE                : 
+STEP                 : 
+STRUCT               : 
+SURPLUS              : 
+SYNCHRO              : 
+TEL                  : 
+THEN                 : 
+TIMES                : 
+TPOINT               : 
+TRANSPOSE            : 
+TRUE                 : 22
+TYPE                 : 
+UINT16               : 
+UINT32               : 
+UINT64               : 
+UINT8                : 
+UNLESS               : 
+UNSAFE               : 
+UNSIGNED             : 
+UNTIL                : 
+USES                 : 
+VAR                  : 
+VERTICALBAR          : 
+WHEN                 : 
+WHERE                : 
+WITH                 : 
+XOR                  : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+Atom                 : 19
+Bool_atom            : 20
+Const_block          : 4 5
+Const_decl           : 5
+Decls                : 2
+Decls_zero_or_mode   : 1 2
+Expr                 : 7
+External             : 9
+Interface_status     : 7 8
+Program              : 0
+Type_expr            : 7 8
+Visibility           : 11
+Visibility_zero_or_one : 9 10
+empty                : 3 6 12
+id                   : 7 8
+
