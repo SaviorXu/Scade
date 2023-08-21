@@ -400,12 +400,7 @@ lexer = lex.lex()
 
 if __name__ == '__main__':
     data = '''
-    node ex1(x, y: int64) returns (z: int64)
-let
-z = 0 -> if x=0
-then pre x + last \'y
-else 0;
-tel
+package NoPackage const d:int32=0;end;
     '''
     toks = get_tokens(data)
     for tok in toks:

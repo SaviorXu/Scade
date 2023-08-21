@@ -2,13 +2,16 @@
 # 2.使用符号表树实现作用域
 
 class Symbol:
-    def __init__(self, Name=None, Kind=None, Type=None, IsReturn=False,Public=True,External=False) -> None:
+    def __init__(self, Name=None, Kind=None, Type=None,Public=True,External=False,IsPackage=False,PackageName=None,IsReturn=False) -> None:
         self.Name = Name  # 标识符的名字
-        self.Kind = Kind  # 标识符的类型：常量(Const) 变量(Var) 类型(Type) 节点(Node)
+        self.Kind = Kind  # 标识符的类型：常量(Const) 变量(Var) 类型(Type) 节点(Node) 包(Package)
 
         self.Type = Type  # Type类型
         self.Public=Public
         self.External=External
+
+        self.isPackage=IsPackage
+        self.PackageName=PackageName
 
         # self.VarType = VarType             #常量、变量等类型标识符的数据类型
         # self.TypeType = TypeType           #类型定义的基本类型，或者Struct、Enum

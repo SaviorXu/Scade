@@ -12,17 +12,13 @@ Unused terminals:
     BODY
     CASE
     CHAR
-    CLOCK
-    COMMA
     CURRENT
     DEFAULT
     DIV
-    DIVIDE
     DO
     ELSE
     ELSIF
     EMIT
-    END
     ENUM
     EVERY
     EXPONENT
@@ -37,7 +33,6 @@ Unused terminals:
     FOLDI
     FOLDW
     FOLDWI
-    FUNCTION
     GREATER
     GREATEREQU
     GROUP
@@ -49,10 +44,9 @@ Unused terminals:
     INT
     INT16
     INT64
-    INTCONST
     INTEGER
+    INTEGERNUM
     IS
-    LAND
     LAST
     LBPARENTHESE
     LBRACKET
@@ -60,14 +54,8 @@ Unused terminals:
     LESSEQU
     LET
     LNOT
-    LOR
-    LPARENTHESE
     LSHIFT
-    LSL
-    LSR
-    LV6ID
     LV6IDREF
-    LXOR
     MAKE
     MAP
     MAPFOLD
@@ -79,11 +67,8 @@ Unused terminals:
     MAPWI
     MATCH
     MERGE
-    MINUS
-    MOD
     MODEL
     NEEDS
-    NODE
     NOEQU
     NOR
     NOT
@@ -91,11 +76,8 @@ Unused terminals:
     OF
     OPEN
     OR
-    PACKAGE
-    PLUS
     POINT
     PRE
-    PROBE
     PROVIDES
     RBPARENTHESE
     RBRACKET
@@ -103,9 +85,7 @@ Unused terminals:
     REALCONST
     RESTART
     RESUME
-    RETURNS
     REVERSE
-    RPARENTHESE
     RSHIFT
     SENSOR
     SHIFT
@@ -113,7 +93,6 @@ Unused terminals:
     SIGNED
     SINGLEQUOTE
     SPECIALIZE
-    STAR
     STATE
     STEP
     STRUCT
@@ -148,26 +127,74 @@ Rule 1     Program -> Decls_zero_or_mode
 Rule 2     Decls_zero_or_mode -> Decls Decls_zero_or_mode
 Rule 3     Decls_zero_or_mode -> empty
 Rule 4     Decls -> Const_block
-Rule 5     Const_block -> CONST Const_decl SEMICOLON Const_block
-Rule 6     Const_block -> empty
-Rule 7     Const_decl -> Interface_status id COLON Type_expr EQU Expr
-Rule 8     Const_decl -> Interface_status id COLON Type_expr
-Rule 9     Interface_status -> Visibility_zero_or_one External
-Rule 10    Interface_status -> Visibility_zero_or_one
-Rule 11    Visibility_zero_or_one -> Visibility
-Rule 12    Visibility_zero_or_one -> empty
-Rule 13    External -> IMPORTED
-Rule 14    Visibility -> PRIVATE
-Rule 15    Visibility -> PUBLIC
-Rule 16    Type_expr -> BOOL
-Rule 17    Type_expr -> INT32
-Rule 18    Type_expr -> INT8
-Rule 19    Expr -> Atom
-Rule 20    Atom -> Bool_atom
-Rule 21    Atom -> INTEGERNUM
-Rule 22    Bool_atom -> TRUE
-Rule 23    Bool_atom -> FALSE
-Rule 24    empty -> <empty>
+Rule 5     Decls -> Package_decl
+Rule 6     Decls -> User_op_decl
+Rule 7     Package_decl -> Package Visibility_zero_or_one Lv6id Decls_zero_or_mode END SEMICOLON
+Rule 8     User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body
+Rule 9     Lv6id -> LV6ID
+Rule 10    Op_kind -> FUNCTION
+Rule 11    Op_kind -> NODE
+Rule 12    Opt_body -> SEMICOLON
+Rule 13    Opt_body -> Equation SEMICOLON
+Rule 14    Equation -> Simple_equation
+Rule 15    Simple_equation -> Lhs EQU Expr
+Rule 16    Lhs -> LPARENTHESE RPARENTHESE
+Rule 17    Lhs -> Lhs_id Lhs_1
+Rule 18    Lhs_1 -> COMMA Lhs_id Lhs_1
+Rule 19    Lhs_1 -> empty
+Rule 20    Lhs_id -> LV6ID
+Rule 21    User_op_decl_1 -> empty
+Rule 22    User_op_decl_2 -> empty
+Rule 23    User_op_decl_3 -> empty
+Rule 24    Params -> LPARENTHESE Params_1 RPARENTHESE
+Rule 25    Params_1 -> Var_decls Params_2
+Rule 26    Params_1 -> empty
+Rule 27    Params_2 -> SEMICOLON Var_decls Params_2
+Rule 28    Params_2 -> empty
+Rule 29    Var_decls -> Var_id Var_decls_1 COLON Type_expr Var_decls_2 Var_decls_3 Var_decls_4
+Rule 30    Var_decls_1 -> COMMA Var_id Var_decls_1
+Rule 31    Var_decls_1 -> empty
+Rule 32    Var_id -> Var_id_1 Var_id_2 LV6ID
+Rule 33    Var_id_1 -> CLOCK
+Rule 34    Var_id_1 -> empty
+Rule 35    Var_id_2 -> PROBE
+Rule 36    Var_id_2 -> empty
+Rule 37    Var_decls_2 -> empty
+Rule 38    Var_decls_3 -> empty
+Rule 39    Var_decls_4 -> empty
+Rule 40    Package -> PACKAGE
+Rule 41    Const_block -> CONST Const_decl SEMICOLON Const_block
+Rule 42    Const_block -> empty
+Rule 43    Const_decl -> Interface_status LV6ID COLON Type_expr EQU Expr
+Rule 44    Const_decl -> Interface_status LV6ID COLON Type_expr
+Rule 45    Interface_status -> Visibility_zero_or_one External
+Rule 46    Interface_status -> Visibility_zero_or_one
+Rule 47    Visibility_zero_or_one -> Visibility
+Rule 48    Visibility_zero_or_one -> empty
+Rule 49    External -> IMPORTED
+Rule 50    Visibility -> PRIVATE
+Rule 51    Visibility -> PUBLIC
+Rule 52    Type_expr -> BOOL
+Rule 53    Type_expr -> INT32
+Rule 54    Type_expr -> INT8
+Rule 55    Expr -> Atom
+Rule 56    Expr -> Arith_expr
+Rule 57    Arith_expr -> Expr Bin_arith_op Expr
+Rule 58    Bin_arith_op -> PLUS
+Rule 59    Bin_arith_op -> MINUS
+Rule 60    Bin_arith_op -> STAR
+Rule 61    Bin_arith_op -> DIVIDE
+Rule 62    Bin_arith_op -> MOD
+Rule 63    Bin_arith_op -> LAND
+Rule 64    Bin_arith_op -> LOR
+Rule 65    Bin_arith_op -> LXOR
+Rule 66    Bin_arith_op -> LSL
+Rule 67    Bin_arith_op -> LSR
+Rule 68    Atom -> Bool_atom
+Rule 69    Atom -> INTCONST
+Rule 70    Bool_atom -> TRUE
+Rule 71    Bool_atom -> FALSE
+Rule 72    empty -> <empty>
 
 Terminals, with rules where they appear
 
@@ -179,28 +206,28 @@ ASSUME               :
 AT                   : 
 AUTOMATON            : 
 BODY                 : 
-BOOL                 : 16
+BOOL                 : 52
 CASE                 : 
 CHAR                 : 
-CLOCK                : 
-COLON                : 7 8
-COMMA                : 
-CONST                : 5
+CLOCK                : 33
+COLON                : 29 43 44
+COMMA                : 18 30
+CONST                : 41
 CURRENT              : 
 DEFAULT              : 
 DIV                  : 
-DIVIDE               : 
+DIVIDE               : 61
 DO                   : 
 ELSE                 : 
 ELSIF                : 
 EMIT                 : 
-END                  : 
+END                  : 7
 ENUM                 : 
-EQU                  : 7
+EQU                  : 15 43
 EVERY                : 
 EXPONENT             : 
 EXTERN               : 
-FALSE                : 23
+FALSE                : 71
 FBY                  : 
 FINAL                : 
 FLATTEN              : 
@@ -211,26 +238,26 @@ FOLD                 :
 FOLDI                : 
 FOLDW                : 
 FOLDWI               : 
-FUNCTION             : 
+FUNCTION             : 10
 GREATER              : 
 GREATEREQU           : 
 GROUP                : 
 GUARANTEE            : 
 HASHTAG              : 
 IF                   : 
-IMPORTED             : 13
+IMPORTED             : 49
 INCLUDE              : 
 INITIAL              : 
 INT                  : 
 INT16                : 
-INT32                : 17
+INT32                : 53
 INT64                : 
-INT8                 : 18
-INTCONST             : 
+INT8                 : 54
+INTCONST             : 69
 INTEGER              : 
-INTEGERNUM           : 21
+INTEGERNUM           : 
 IS                   : 
-LAND                 : 
+LAND                 : 63
 LAST                 : 
 LBPARENTHESE         : 
 LBRACKET             : 
@@ -238,14 +265,14 @@ LESS                 :
 LESSEQU              : 
 LET                  : 
 LNOT                 : 
-LOR                  : 
-LPARENTHESE          : 
+LOR                  : 64
+LPARENTHESE          : 16 24
 LSHIFT               : 
-LSL                  : 
-LSR                  : 
-LV6ID                : 
+LSL                  : 66
+LSR                  : 67
+LV6ID                : 8 9 20 32 43 44
 LV6IDREF             : 
-LXOR                 : 
+LXOR                 : 65
 MAKE                 : 
 MAP                  : 
 MAPFOLD              : 
@@ -257,11 +284,11 @@ MAPW                 :
 MAPWI                : 
 MATCH                : 
 MERGE                : 
-MINUS                : 
-MOD                  : 
+MINUS                : 59
+MOD                  : 62
 MODEL                : 
 NEEDS                : 
-NODE                 : 
+NODE                 : 11
 NOEQU                : 
 NOR                  : 
 NOT                  : 
@@ -269,32 +296,32 @@ NUMERIC              :
 OF                   : 
 OPEN                 : 
 OR                   : 
-PACKAGE              : 
-PLUS                 : 
+PACKAGE              : 40
+PLUS                 : 58
 POINT                : 
 PRE                  : 
-PRIVATE              : 14
-PROBE                : 
+PRIVATE              : 50
+PROBE                : 35
 PROVIDES             : 
-PUBLIC               : 15
+PUBLIC               : 51
 RBPARENTHESE         : 
 RBRACKET             : 
 REAL                 : 
 REALCONST            : 
 RESTART              : 
 RESUME               : 
-RETURNS              : 
+RETURNS              : 8
 REVERSE              : 
-RPARENTHESE          : 
+RPARENTHESE          : 16 24
 RSHIFT               : 
-SEMICOLON            : 5
+SEMICOLON            : 7 12 13 27 41
 SENSOR               : 
 SHIFT                : 
 SIG                  : 
 SIGNED               : 
 SINGLEQUOTE          : 
 SPECIALIZE           : 
-STAR                 : 
+STAR                 : 60
 STATE                : 
 STEP                 : 
 STRUCT               : 
@@ -305,7 +332,7 @@ THEN                 :
 TIMES                : 
 TPOINT               : 
 TRANSPOSE            : 
-TRUE                 : 22
+TRUE                 : 70
 TYPE                 : 
 UINT16               : 
 UINT32               : 
@@ -326,19 +353,1512 @@ error                :
 
 Nonterminals, with rules where they appear
 
-Atom                 : 19
-Bool_atom            : 20
-Const_block          : 4 5
-Const_decl           : 5
+Arith_expr           : 56
+Atom                 : 55
+Bin_arith_op         : 57
+Bool_atom            : 68
+Const_block          : 4 41
+Const_decl           : 41
 Decls                : 2
-Decls_zero_or_mode   : 1 2
-Expr                 : 7
-External             : 9
-Interface_status     : 7 8
+Decls_zero_or_mode   : 1 2 7
+Equation             : 13
+Expr                 : 15 43 57 57
+External             : 45
+Interface_status     : 8 43 44
+Lhs                  : 15
+Lhs_1                : 17 18
+Lhs_id               : 17 18
+Lv6id                : 7
+Op_kind              : 8
+Opt_body             : 8
+Package              : 7
+Package_decl         : 5
+Params               : 8 8
+Params_1             : 24
+Params_2             : 25 27
 Program              : 0
-Type_expr            : 7 8
-Visibility           : 11
-Visibility_zero_or_one : 9 10
-empty                : 3 6 12
-id                   : 7 8
+Simple_equation      : 14
+Type_expr            : 29 43 44
+User_op_decl         : 6
+User_op_decl_1       : 8
+User_op_decl_2       : 8
+User_op_decl_3       : 8
+Var_decls            : 25 27
+Var_decls_1          : 29 30
+Var_decls_2          : 29
+Var_decls_3          : 29
+Var_decls_4          : 29
+Var_id               : 29 30
+Var_id_1             : 32
+Var_id_2             : 32
+Visibility           : 47
+Visibility_zero_or_one : 7 45 46
+empty                : 3 19 21 22 23 26 28 31 34 36 37 38 39 42 48
 
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . Program
+    (1) Program -> . Decls_zero_or_mode
+    (2) Decls_zero_or_mode -> . Decls Decls_zero_or_mode
+    (3) Decls_zero_or_mode -> . empty
+    (4) Decls -> . Const_block
+    (5) Decls -> . Package_decl
+    (6) Decls -> . User_op_decl
+    (72) empty -> .
+    (41) Const_block -> . CONST Const_decl SEMICOLON Const_block
+    (42) Const_block -> . empty
+    (7) Package_decl -> . Package Visibility_zero_or_one Lv6id Decls_zero_or_mode END SEMICOLON
+    (8) User_op_decl -> . Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body
+    (40) Package -> . PACKAGE
+    (10) Op_kind -> . FUNCTION
+    (11) Op_kind -> . NODE
+
+  ! shift/reduce conflict for CONST resolved as shift
+  ! shift/reduce conflict for PACKAGE resolved as shift
+  ! shift/reduce conflict for FUNCTION resolved as shift
+  ! shift/reduce conflict for NODE resolved as shift
+    $end            reduce using rule 72 (empty -> .)
+    CONST           shift and go to state 8
+    PACKAGE         shift and go to state 11
+    FUNCTION        shift and go to state 12
+    NODE            shift and go to state 13
+
+  ! CONST           [ reduce using rule 72 (empty -> .) ]
+  ! PACKAGE         [ reduce using rule 72 (empty -> .) ]
+  ! FUNCTION        [ reduce using rule 72 (empty -> .) ]
+  ! NODE            [ reduce using rule 72 (empty -> .) ]
+
+    Program                        shift and go to state 1
+    Decls_zero_or_mode             shift and go to state 2
+    Decls                          shift and go to state 3
+    empty                          shift and go to state 4
+    Const_block                    shift and go to state 5
+    Package_decl                   shift and go to state 6
+    User_op_decl                   shift and go to state 7
+    Package                        shift and go to state 9
+    Op_kind                        shift and go to state 10
+
+state 1
+
+    (0) S' -> Program .
+
+
+
+state 2
+
+    (1) Program -> Decls_zero_or_mode .
+
+    $end            reduce using rule 1 (Program -> Decls_zero_or_mode .)
+
+
+state 3
+
+    (2) Decls_zero_or_mode -> Decls . Decls_zero_or_mode
+    (2) Decls_zero_or_mode -> . Decls Decls_zero_or_mode
+    (3) Decls_zero_or_mode -> . empty
+    (4) Decls -> . Const_block
+    (5) Decls -> . Package_decl
+    (6) Decls -> . User_op_decl
+    (72) empty -> .
+    (41) Const_block -> . CONST Const_decl SEMICOLON Const_block
+    (42) Const_block -> . empty
+    (7) Package_decl -> . Package Visibility_zero_or_one Lv6id Decls_zero_or_mode END SEMICOLON
+    (8) User_op_decl -> . Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body
+    (40) Package -> . PACKAGE
+    (10) Op_kind -> . FUNCTION
+    (11) Op_kind -> . NODE
+
+  ! shift/reduce conflict for CONST resolved as shift
+  ! shift/reduce conflict for PACKAGE resolved as shift
+  ! shift/reduce conflict for FUNCTION resolved as shift
+  ! shift/reduce conflict for NODE resolved as shift
+    $end            reduce using rule 72 (empty -> .)
+    END             reduce using rule 72 (empty -> .)
+    CONST           shift and go to state 8
+    PACKAGE         shift and go to state 11
+    FUNCTION        shift and go to state 12
+    NODE            shift and go to state 13
+
+  ! CONST           [ reduce using rule 72 (empty -> .) ]
+  ! PACKAGE         [ reduce using rule 72 (empty -> .) ]
+  ! FUNCTION        [ reduce using rule 72 (empty -> .) ]
+  ! NODE            [ reduce using rule 72 (empty -> .) ]
+
+    Decls                          shift and go to state 3
+    Decls_zero_or_mode             shift and go to state 14
+    empty                          shift and go to state 4
+    Const_block                    shift and go to state 5
+    Package_decl                   shift and go to state 6
+    User_op_decl                   shift and go to state 7
+    Package                        shift and go to state 9
+    Op_kind                        shift and go to state 10
+
+state 4
+
+    (3) Decls_zero_or_mode -> empty .
+    (42) Const_block -> empty .
+
+  ! reduce/reduce conflict for $end resolved using rule 3 (Decls_zero_or_mode -> empty .)
+  ! reduce/reduce conflict for END resolved using rule 3 (Decls_zero_or_mode -> empty .)
+    $end            reduce using rule 3 (Decls_zero_or_mode -> empty .)
+    END             reduce using rule 3 (Decls_zero_or_mode -> empty .)
+    CONST           reduce using rule 42 (Const_block -> empty .)
+    PACKAGE         reduce using rule 42 (Const_block -> empty .)
+    FUNCTION        reduce using rule 42 (Const_block -> empty .)
+    NODE            reduce using rule 42 (Const_block -> empty .)
+
+  ! $end            [ reduce using rule 42 (Const_block -> empty .) ]
+  ! END             [ reduce using rule 42 (Const_block -> empty .) ]
+
+
+state 5
+
+    (4) Decls -> Const_block .
+
+    CONST           reduce using rule 4 (Decls -> Const_block .)
+    PACKAGE         reduce using rule 4 (Decls -> Const_block .)
+    FUNCTION        reduce using rule 4 (Decls -> Const_block .)
+    NODE            reduce using rule 4 (Decls -> Const_block .)
+    $end            reduce using rule 4 (Decls -> Const_block .)
+    END             reduce using rule 4 (Decls -> Const_block .)
+
+
+state 6
+
+    (5) Decls -> Package_decl .
+
+    CONST           reduce using rule 5 (Decls -> Package_decl .)
+    PACKAGE         reduce using rule 5 (Decls -> Package_decl .)
+    FUNCTION        reduce using rule 5 (Decls -> Package_decl .)
+    NODE            reduce using rule 5 (Decls -> Package_decl .)
+    $end            reduce using rule 5 (Decls -> Package_decl .)
+    END             reduce using rule 5 (Decls -> Package_decl .)
+
+
+state 7
+
+    (6) Decls -> User_op_decl .
+
+    CONST           reduce using rule 6 (Decls -> User_op_decl .)
+    PACKAGE         reduce using rule 6 (Decls -> User_op_decl .)
+    FUNCTION        reduce using rule 6 (Decls -> User_op_decl .)
+    NODE            reduce using rule 6 (Decls -> User_op_decl .)
+    $end            reduce using rule 6 (Decls -> User_op_decl .)
+    END             reduce using rule 6 (Decls -> User_op_decl .)
+
+
+state 8
+
+    (41) Const_block -> CONST . Const_decl SEMICOLON Const_block
+    (43) Const_decl -> . Interface_status LV6ID COLON Type_expr EQU Expr
+    (44) Const_decl -> . Interface_status LV6ID COLON Type_expr
+    (45) Interface_status -> . Visibility_zero_or_one External
+    (46) Interface_status -> . Visibility_zero_or_one
+    (47) Visibility_zero_or_one -> . Visibility
+    (48) Visibility_zero_or_one -> . empty
+    (50) Visibility -> . PRIVATE
+    (51) Visibility -> . PUBLIC
+    (72) empty -> .
+
+    PRIVATE         shift and go to state 20
+    PUBLIC          shift and go to state 21
+    IMPORTED        reduce using rule 72 (empty -> .)
+    LV6ID           reduce using rule 72 (empty -> .)
+
+    Const_decl                     shift and go to state 15
+    Interface_status               shift and go to state 16
+    Visibility_zero_or_one         shift and go to state 17
+    Visibility                     shift and go to state 18
+    empty                          shift and go to state 19
+
+state 9
+
+    (7) Package_decl -> Package . Visibility_zero_or_one Lv6id Decls_zero_or_mode END SEMICOLON
+    (47) Visibility_zero_or_one -> . Visibility
+    (48) Visibility_zero_or_one -> . empty
+    (50) Visibility -> . PRIVATE
+    (51) Visibility -> . PUBLIC
+    (72) empty -> .
+
+    PRIVATE         shift and go to state 20
+    PUBLIC          shift and go to state 21
+    LV6ID           reduce using rule 72 (empty -> .)
+
+    Visibility_zero_or_one         shift and go to state 22
+    Visibility                     shift and go to state 18
+    empty                          shift and go to state 19
+
+state 10
+
+    (8) User_op_decl -> Op_kind . Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body
+    (45) Interface_status -> . Visibility_zero_or_one External
+    (46) Interface_status -> . Visibility_zero_or_one
+    (47) Visibility_zero_or_one -> . Visibility
+    (48) Visibility_zero_or_one -> . empty
+    (50) Visibility -> . PRIVATE
+    (51) Visibility -> . PUBLIC
+    (72) empty -> .
+
+    PRIVATE         shift and go to state 20
+    PUBLIC          shift and go to state 21
+    IMPORTED        reduce using rule 72 (empty -> .)
+    LV6ID           reduce using rule 72 (empty -> .)
+
+    Interface_status               shift and go to state 23
+    Visibility_zero_or_one         shift and go to state 17
+    Visibility                     shift and go to state 18
+    empty                          shift and go to state 19
+
+state 11
+
+    (40) Package -> PACKAGE .
+
+    PRIVATE         reduce using rule 40 (Package -> PACKAGE .)
+    PUBLIC          reduce using rule 40 (Package -> PACKAGE .)
+    LV6ID           reduce using rule 40 (Package -> PACKAGE .)
+
+
+state 12
+
+    (10) Op_kind -> FUNCTION .
+
+    PRIVATE         reduce using rule 10 (Op_kind -> FUNCTION .)
+    PUBLIC          reduce using rule 10 (Op_kind -> FUNCTION .)
+    LV6ID           reduce using rule 10 (Op_kind -> FUNCTION .)
+    IMPORTED        reduce using rule 10 (Op_kind -> FUNCTION .)
+
+
+state 13
+
+    (11) Op_kind -> NODE .
+
+    PRIVATE         reduce using rule 11 (Op_kind -> NODE .)
+    PUBLIC          reduce using rule 11 (Op_kind -> NODE .)
+    LV6ID           reduce using rule 11 (Op_kind -> NODE .)
+    IMPORTED        reduce using rule 11 (Op_kind -> NODE .)
+
+
+state 14
+
+    (2) Decls_zero_or_mode -> Decls Decls_zero_or_mode .
+
+    $end            reduce using rule 2 (Decls_zero_or_mode -> Decls Decls_zero_or_mode .)
+    END             reduce using rule 2 (Decls_zero_or_mode -> Decls Decls_zero_or_mode .)
+
+
+state 15
+
+    (41) Const_block -> CONST Const_decl . SEMICOLON Const_block
+
+    SEMICOLON       shift and go to state 24
+
+
+state 16
+
+    (43) Const_decl -> Interface_status . LV6ID COLON Type_expr EQU Expr
+    (44) Const_decl -> Interface_status . LV6ID COLON Type_expr
+
+    LV6ID           shift and go to state 25
+
+
+state 17
+
+    (45) Interface_status -> Visibility_zero_or_one . External
+    (46) Interface_status -> Visibility_zero_or_one .
+    (49) External -> . IMPORTED
+
+    LV6ID           reduce using rule 46 (Interface_status -> Visibility_zero_or_one .)
+    IMPORTED        shift and go to state 27
+
+    External                       shift and go to state 26
+
+state 18
+
+    (47) Visibility_zero_or_one -> Visibility .
+
+    IMPORTED        reduce using rule 47 (Visibility_zero_or_one -> Visibility .)
+    LV6ID           reduce using rule 47 (Visibility_zero_or_one -> Visibility .)
+
+
+state 19
+
+    (48) Visibility_zero_or_one -> empty .
+
+    IMPORTED        reduce using rule 48 (Visibility_zero_or_one -> empty .)
+    LV6ID           reduce using rule 48 (Visibility_zero_or_one -> empty .)
+
+
+state 20
+
+    (50) Visibility -> PRIVATE .
+
+    IMPORTED        reduce using rule 50 (Visibility -> PRIVATE .)
+    LV6ID           reduce using rule 50 (Visibility -> PRIVATE .)
+
+
+state 21
+
+    (51) Visibility -> PUBLIC .
+
+    IMPORTED        reduce using rule 51 (Visibility -> PUBLIC .)
+    LV6ID           reduce using rule 51 (Visibility -> PUBLIC .)
+
+
+state 22
+
+    (7) Package_decl -> Package Visibility_zero_or_one . Lv6id Decls_zero_or_mode END SEMICOLON
+    (9) Lv6id -> . LV6ID
+
+    LV6ID           shift and go to state 29
+
+    Lv6id                          shift and go to state 28
+
+state 23
+
+    (8) User_op_decl -> Op_kind Interface_status . LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body
+
+    LV6ID           shift and go to state 30
+
+
+state 24
+
+    (41) Const_block -> CONST Const_decl SEMICOLON . Const_block
+    (41) Const_block -> . CONST Const_decl SEMICOLON Const_block
+    (42) Const_block -> . empty
+    (72) empty -> .
+
+  ! shift/reduce conflict for CONST resolved as shift
+    CONST           shift and go to state 8
+    PACKAGE         reduce using rule 72 (empty -> .)
+    FUNCTION        reduce using rule 72 (empty -> .)
+    NODE            reduce using rule 72 (empty -> .)
+    $end            reduce using rule 72 (empty -> .)
+    END             reduce using rule 72 (empty -> .)
+
+  ! CONST           [ reduce using rule 72 (empty -> .) ]
+
+    Const_block                    shift and go to state 31
+    empty                          shift and go to state 32
+
+state 25
+
+    (43) Const_decl -> Interface_status LV6ID . COLON Type_expr EQU Expr
+    (44) Const_decl -> Interface_status LV6ID . COLON Type_expr
+
+    COLON           shift and go to state 33
+
+
+state 26
+
+    (45) Interface_status -> Visibility_zero_or_one External .
+
+    LV6ID           reduce using rule 45 (Interface_status -> Visibility_zero_or_one External .)
+
+
+state 27
+
+    (49) External -> IMPORTED .
+
+    LV6ID           reduce using rule 49 (External -> IMPORTED .)
+
+
+state 28
+
+    (7) Package_decl -> Package Visibility_zero_or_one Lv6id . Decls_zero_or_mode END SEMICOLON
+    (2) Decls_zero_or_mode -> . Decls Decls_zero_or_mode
+    (3) Decls_zero_or_mode -> . empty
+    (4) Decls -> . Const_block
+    (5) Decls -> . Package_decl
+    (6) Decls -> . User_op_decl
+    (72) empty -> .
+    (41) Const_block -> . CONST Const_decl SEMICOLON Const_block
+    (42) Const_block -> . empty
+    (7) Package_decl -> . Package Visibility_zero_or_one Lv6id Decls_zero_or_mode END SEMICOLON
+    (8) User_op_decl -> . Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body
+    (40) Package -> . PACKAGE
+    (10) Op_kind -> . FUNCTION
+    (11) Op_kind -> . NODE
+
+  ! shift/reduce conflict for CONST resolved as shift
+  ! shift/reduce conflict for PACKAGE resolved as shift
+  ! shift/reduce conflict for FUNCTION resolved as shift
+  ! shift/reduce conflict for NODE resolved as shift
+    END             reduce using rule 72 (empty -> .)
+    CONST           shift and go to state 8
+    PACKAGE         shift and go to state 11
+    FUNCTION        shift and go to state 12
+    NODE            shift and go to state 13
+
+  ! CONST           [ reduce using rule 72 (empty -> .) ]
+  ! PACKAGE         [ reduce using rule 72 (empty -> .) ]
+  ! FUNCTION        [ reduce using rule 72 (empty -> .) ]
+  ! NODE            [ reduce using rule 72 (empty -> .) ]
+
+    Package                        shift and go to state 9
+    Decls_zero_or_mode             shift and go to state 34
+    Decls                          shift and go to state 3
+    empty                          shift and go to state 4
+    Const_block                    shift and go to state 5
+    Package_decl                   shift and go to state 6
+    User_op_decl                   shift and go to state 7
+    Op_kind                        shift and go to state 10
+
+state 29
+
+    (9) Lv6id -> LV6ID .
+
+    CONST           reduce using rule 9 (Lv6id -> LV6ID .)
+    PACKAGE         reduce using rule 9 (Lv6id -> LV6ID .)
+    FUNCTION        reduce using rule 9 (Lv6id -> LV6ID .)
+    NODE            reduce using rule 9 (Lv6id -> LV6ID .)
+    END             reduce using rule 9 (Lv6id -> LV6ID .)
+
+
+state 30
+
+    (8) User_op_decl -> Op_kind Interface_status LV6ID . User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body
+    (21) User_op_decl_1 -> . empty
+    (72) empty -> .
+
+    LPARENTHESE     reduce using rule 72 (empty -> .)
+
+    User_op_decl_1                 shift and go to state 35
+    empty                          shift and go to state 36
+
+state 31
+
+    (41) Const_block -> CONST Const_decl SEMICOLON Const_block .
+
+    CONST           reduce using rule 41 (Const_block -> CONST Const_decl SEMICOLON Const_block .)
+    PACKAGE         reduce using rule 41 (Const_block -> CONST Const_decl SEMICOLON Const_block .)
+    FUNCTION        reduce using rule 41 (Const_block -> CONST Const_decl SEMICOLON Const_block .)
+    NODE            reduce using rule 41 (Const_block -> CONST Const_decl SEMICOLON Const_block .)
+    $end            reduce using rule 41 (Const_block -> CONST Const_decl SEMICOLON Const_block .)
+    END             reduce using rule 41 (Const_block -> CONST Const_decl SEMICOLON Const_block .)
+
+
+state 32
+
+    (42) Const_block -> empty .
+
+    CONST           reduce using rule 42 (Const_block -> empty .)
+    PACKAGE         reduce using rule 42 (Const_block -> empty .)
+    FUNCTION        reduce using rule 42 (Const_block -> empty .)
+    NODE            reduce using rule 42 (Const_block -> empty .)
+    $end            reduce using rule 42 (Const_block -> empty .)
+    END             reduce using rule 42 (Const_block -> empty .)
+
+
+state 33
+
+    (43) Const_decl -> Interface_status LV6ID COLON . Type_expr EQU Expr
+    (44) Const_decl -> Interface_status LV6ID COLON . Type_expr
+    (52) Type_expr -> . BOOL
+    (53) Type_expr -> . INT32
+    (54) Type_expr -> . INT8
+
+    BOOL            shift and go to state 38
+    INT32           shift and go to state 39
+    INT8            shift and go to state 40
+
+    Type_expr                      shift and go to state 37
+
+state 34
+
+    (7) Package_decl -> Package Visibility_zero_or_one Lv6id Decls_zero_or_mode . END SEMICOLON
+
+    END             shift and go to state 41
+
+
+state 35
+
+    (8) User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 . Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body
+    (24) Params -> . LPARENTHESE Params_1 RPARENTHESE
+
+    LPARENTHESE     shift and go to state 43
+
+    Params                         shift and go to state 42
+
+state 36
+
+    (21) User_op_decl_1 -> empty .
+
+    LPARENTHESE     reduce using rule 21 (User_op_decl_1 -> empty .)
+
+
+state 37
+
+    (43) Const_decl -> Interface_status LV6ID COLON Type_expr . EQU Expr
+    (44) Const_decl -> Interface_status LV6ID COLON Type_expr .
+
+    EQU             shift and go to state 44
+    SEMICOLON       reduce using rule 44 (Const_decl -> Interface_status LV6ID COLON Type_expr .)
+
+
+state 38
+
+    (52) Type_expr -> BOOL .
+
+    EQU             reduce using rule 52 (Type_expr -> BOOL .)
+    SEMICOLON       reduce using rule 52 (Type_expr -> BOOL .)
+    RPARENTHESE     reduce using rule 52 (Type_expr -> BOOL .)
+
+
+state 39
+
+    (53) Type_expr -> INT32 .
+
+    EQU             reduce using rule 53 (Type_expr -> INT32 .)
+    SEMICOLON       reduce using rule 53 (Type_expr -> INT32 .)
+    RPARENTHESE     reduce using rule 53 (Type_expr -> INT32 .)
+
+
+state 40
+
+    (54) Type_expr -> INT8 .
+
+    EQU             reduce using rule 54 (Type_expr -> INT8 .)
+    SEMICOLON       reduce using rule 54 (Type_expr -> INT8 .)
+    RPARENTHESE     reduce using rule 54 (Type_expr -> INT8 .)
+
+
+state 41
+
+    (7) Package_decl -> Package Visibility_zero_or_one Lv6id Decls_zero_or_mode END . SEMICOLON
+
+    SEMICOLON       shift and go to state 45
+
+
+state 42
+
+    (8) User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 Params . RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body
+
+    RETURNS         shift and go to state 46
+
+
+state 43
+
+    (24) Params -> LPARENTHESE . Params_1 RPARENTHESE
+    (25) Params_1 -> . Var_decls Params_2
+    (26) Params_1 -> . empty
+    (29) Var_decls -> . Var_id Var_decls_1 COLON Type_expr Var_decls_2 Var_decls_3 Var_decls_4
+    (72) empty -> .
+    (32) Var_id -> . Var_id_1 Var_id_2 LV6ID
+    (33) Var_id_1 -> . CLOCK
+    (34) Var_id_1 -> . empty
+
+    RPARENTHESE     reduce using rule 72 (empty -> .)
+    PROBE           reduce using rule 72 (empty -> .)
+    LV6ID           reduce using rule 72 (empty -> .)
+    CLOCK           shift and go to state 52
+
+    Params_1                       shift and go to state 47
+    Var_decls                      shift and go to state 48
+    empty                          shift and go to state 49
+    Var_id                         shift and go to state 50
+    Var_id_1                       shift and go to state 51
+
+state 44
+
+    (43) Const_decl -> Interface_status LV6ID COLON Type_expr EQU . Expr
+    (55) Expr -> . Atom
+    (56) Expr -> . Arith_expr
+    (68) Atom -> . Bool_atom
+    (69) Atom -> . INTCONST
+    (57) Arith_expr -> . Expr Bin_arith_op Expr
+    (70) Bool_atom -> . TRUE
+    (71) Bool_atom -> . FALSE
+
+    INTCONST        shift and go to state 57
+    TRUE            shift and go to state 58
+    FALSE           shift and go to state 59
+
+    Expr                           shift and go to state 53
+    Atom                           shift and go to state 54
+    Arith_expr                     shift and go to state 55
+    Bool_atom                      shift and go to state 56
+
+state 45
+
+    (7) Package_decl -> Package Visibility_zero_or_one Lv6id Decls_zero_or_mode END SEMICOLON .
+
+    CONST           reduce using rule 7 (Package_decl -> Package Visibility_zero_or_one Lv6id Decls_zero_or_mode END SEMICOLON .)
+    PACKAGE         reduce using rule 7 (Package_decl -> Package Visibility_zero_or_one Lv6id Decls_zero_or_mode END SEMICOLON .)
+    FUNCTION        reduce using rule 7 (Package_decl -> Package Visibility_zero_or_one Lv6id Decls_zero_or_mode END SEMICOLON .)
+    NODE            reduce using rule 7 (Package_decl -> Package Visibility_zero_or_one Lv6id Decls_zero_or_mode END SEMICOLON .)
+    $end            reduce using rule 7 (Package_decl -> Package Visibility_zero_or_one Lv6id Decls_zero_or_mode END SEMICOLON .)
+    END             reduce using rule 7 (Package_decl -> Package Visibility_zero_or_one Lv6id Decls_zero_or_mode END SEMICOLON .)
+
+
+state 46
+
+    (8) User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS . Params User_op_decl_2 User_op_decl_3 Opt_body
+    (24) Params -> . LPARENTHESE Params_1 RPARENTHESE
+
+    LPARENTHESE     shift and go to state 43
+
+    Params                         shift and go to state 60
+
+state 47
+
+    (24) Params -> LPARENTHESE Params_1 . RPARENTHESE
+
+    RPARENTHESE     shift and go to state 61
+
+
+state 48
+
+    (25) Params_1 -> Var_decls . Params_2
+    (27) Params_2 -> . SEMICOLON Var_decls Params_2
+    (28) Params_2 -> . empty
+    (72) empty -> .
+
+    SEMICOLON       shift and go to state 63
+    RPARENTHESE     reduce using rule 72 (empty -> .)
+
+    Params_2                       shift and go to state 62
+    empty                          shift and go to state 64
+
+state 49
+
+    (26) Params_1 -> empty .
+    (34) Var_id_1 -> empty .
+
+    RPARENTHESE     reduce using rule 26 (Params_1 -> empty .)
+    PROBE           reduce using rule 34 (Var_id_1 -> empty .)
+    LV6ID           reduce using rule 34 (Var_id_1 -> empty .)
+
+
+state 50
+
+    (29) Var_decls -> Var_id . Var_decls_1 COLON Type_expr Var_decls_2 Var_decls_3 Var_decls_4
+    (30) Var_decls_1 -> . COMMA Var_id Var_decls_1
+    (31) Var_decls_1 -> . empty
+    (72) empty -> .
+
+    COMMA           shift and go to state 66
+    COLON           reduce using rule 72 (empty -> .)
+
+    Var_decls_1                    shift and go to state 65
+    empty                          shift and go to state 67
+
+state 51
+
+    (32) Var_id -> Var_id_1 . Var_id_2 LV6ID
+    (35) Var_id_2 -> . PROBE
+    (36) Var_id_2 -> . empty
+    (72) empty -> .
+
+    PROBE           shift and go to state 69
+    LV6ID           reduce using rule 72 (empty -> .)
+
+    Var_id_2                       shift and go to state 68
+    empty                          shift and go to state 70
+
+state 52
+
+    (33) Var_id_1 -> CLOCK .
+
+    PROBE           reduce using rule 33 (Var_id_1 -> CLOCK .)
+    LV6ID           reduce using rule 33 (Var_id_1 -> CLOCK .)
+
+
+state 53
+
+    (43) Const_decl -> Interface_status LV6ID COLON Type_expr EQU Expr .
+    (57) Arith_expr -> Expr . Bin_arith_op Expr
+    (58) Bin_arith_op -> . PLUS
+    (59) Bin_arith_op -> . MINUS
+    (60) Bin_arith_op -> . STAR
+    (61) Bin_arith_op -> . DIVIDE
+    (62) Bin_arith_op -> . MOD
+    (63) Bin_arith_op -> . LAND
+    (64) Bin_arith_op -> . LOR
+    (65) Bin_arith_op -> . LXOR
+    (66) Bin_arith_op -> . LSL
+    (67) Bin_arith_op -> . LSR
+
+    SEMICOLON       reduce using rule 43 (Const_decl -> Interface_status LV6ID COLON Type_expr EQU Expr .)
+    PLUS            shift and go to state 72
+    MINUS           shift and go to state 73
+    STAR            shift and go to state 74
+    DIVIDE          shift and go to state 75
+    MOD             shift and go to state 76
+    LAND            shift and go to state 77
+    LOR             shift and go to state 78
+    LXOR            shift and go to state 79
+    LSL             shift and go to state 80
+    LSR             shift and go to state 81
+
+    Bin_arith_op                   shift and go to state 71
+
+state 54
+
+    (55) Expr -> Atom .
+
+    PLUS            reduce using rule 55 (Expr -> Atom .)
+    MINUS           reduce using rule 55 (Expr -> Atom .)
+    STAR            reduce using rule 55 (Expr -> Atom .)
+    DIVIDE          reduce using rule 55 (Expr -> Atom .)
+    MOD             reduce using rule 55 (Expr -> Atom .)
+    LAND            reduce using rule 55 (Expr -> Atom .)
+    LOR             reduce using rule 55 (Expr -> Atom .)
+    LXOR            reduce using rule 55 (Expr -> Atom .)
+    LSL             reduce using rule 55 (Expr -> Atom .)
+    LSR             reduce using rule 55 (Expr -> Atom .)
+    SEMICOLON       reduce using rule 55 (Expr -> Atom .)
+
+
+state 55
+
+    (56) Expr -> Arith_expr .
+
+    PLUS            reduce using rule 56 (Expr -> Arith_expr .)
+    MINUS           reduce using rule 56 (Expr -> Arith_expr .)
+    STAR            reduce using rule 56 (Expr -> Arith_expr .)
+    DIVIDE          reduce using rule 56 (Expr -> Arith_expr .)
+    MOD             reduce using rule 56 (Expr -> Arith_expr .)
+    LAND            reduce using rule 56 (Expr -> Arith_expr .)
+    LOR             reduce using rule 56 (Expr -> Arith_expr .)
+    LXOR            reduce using rule 56 (Expr -> Arith_expr .)
+    LSL             reduce using rule 56 (Expr -> Arith_expr .)
+    LSR             reduce using rule 56 (Expr -> Arith_expr .)
+    SEMICOLON       reduce using rule 56 (Expr -> Arith_expr .)
+
+
+state 56
+
+    (68) Atom -> Bool_atom .
+
+    PLUS            reduce using rule 68 (Atom -> Bool_atom .)
+    MINUS           reduce using rule 68 (Atom -> Bool_atom .)
+    STAR            reduce using rule 68 (Atom -> Bool_atom .)
+    DIVIDE          reduce using rule 68 (Atom -> Bool_atom .)
+    MOD             reduce using rule 68 (Atom -> Bool_atom .)
+    LAND            reduce using rule 68 (Atom -> Bool_atom .)
+    LOR             reduce using rule 68 (Atom -> Bool_atom .)
+    LXOR            reduce using rule 68 (Atom -> Bool_atom .)
+    LSL             reduce using rule 68 (Atom -> Bool_atom .)
+    LSR             reduce using rule 68 (Atom -> Bool_atom .)
+    SEMICOLON       reduce using rule 68 (Atom -> Bool_atom .)
+
+
+state 57
+
+    (69) Atom -> INTCONST .
+
+    PLUS            reduce using rule 69 (Atom -> INTCONST .)
+    MINUS           reduce using rule 69 (Atom -> INTCONST .)
+    STAR            reduce using rule 69 (Atom -> INTCONST .)
+    DIVIDE          reduce using rule 69 (Atom -> INTCONST .)
+    MOD             reduce using rule 69 (Atom -> INTCONST .)
+    LAND            reduce using rule 69 (Atom -> INTCONST .)
+    LOR             reduce using rule 69 (Atom -> INTCONST .)
+    LXOR            reduce using rule 69 (Atom -> INTCONST .)
+    LSL             reduce using rule 69 (Atom -> INTCONST .)
+    LSR             reduce using rule 69 (Atom -> INTCONST .)
+    SEMICOLON       reduce using rule 69 (Atom -> INTCONST .)
+
+
+state 58
+
+    (70) Bool_atom -> TRUE .
+
+    PLUS            reduce using rule 70 (Bool_atom -> TRUE .)
+    MINUS           reduce using rule 70 (Bool_atom -> TRUE .)
+    STAR            reduce using rule 70 (Bool_atom -> TRUE .)
+    DIVIDE          reduce using rule 70 (Bool_atom -> TRUE .)
+    MOD             reduce using rule 70 (Bool_atom -> TRUE .)
+    LAND            reduce using rule 70 (Bool_atom -> TRUE .)
+    LOR             reduce using rule 70 (Bool_atom -> TRUE .)
+    LXOR            reduce using rule 70 (Bool_atom -> TRUE .)
+    LSL             reduce using rule 70 (Bool_atom -> TRUE .)
+    LSR             reduce using rule 70 (Bool_atom -> TRUE .)
+    SEMICOLON       reduce using rule 70 (Bool_atom -> TRUE .)
+
+
+state 59
+
+    (71) Bool_atom -> FALSE .
+
+    PLUS            reduce using rule 71 (Bool_atom -> FALSE .)
+    MINUS           reduce using rule 71 (Bool_atom -> FALSE .)
+    STAR            reduce using rule 71 (Bool_atom -> FALSE .)
+    DIVIDE          reduce using rule 71 (Bool_atom -> FALSE .)
+    MOD             reduce using rule 71 (Bool_atom -> FALSE .)
+    LAND            reduce using rule 71 (Bool_atom -> FALSE .)
+    LOR             reduce using rule 71 (Bool_atom -> FALSE .)
+    LXOR            reduce using rule 71 (Bool_atom -> FALSE .)
+    LSL             reduce using rule 71 (Bool_atom -> FALSE .)
+    LSR             reduce using rule 71 (Bool_atom -> FALSE .)
+    SEMICOLON       reduce using rule 71 (Bool_atom -> FALSE .)
+
+
+state 60
+
+    (8) User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params . User_op_decl_2 User_op_decl_3 Opt_body
+    (22) User_op_decl_2 -> . empty
+    (72) empty -> .
+
+    SEMICOLON       reduce using rule 72 (empty -> .)
+    LPARENTHESE     reduce using rule 72 (empty -> .)
+    LV6ID           reduce using rule 72 (empty -> .)
+
+    User_op_decl_2                 shift and go to state 82
+    empty                          shift and go to state 83
+
+state 61
+
+    (24) Params -> LPARENTHESE Params_1 RPARENTHESE .
+
+    RETURNS         reduce using rule 24 (Params -> LPARENTHESE Params_1 RPARENTHESE .)
+    SEMICOLON       reduce using rule 24 (Params -> LPARENTHESE Params_1 RPARENTHESE .)
+    LPARENTHESE     reduce using rule 24 (Params -> LPARENTHESE Params_1 RPARENTHESE .)
+    LV6ID           reduce using rule 24 (Params -> LPARENTHESE Params_1 RPARENTHESE .)
+
+
+state 62
+
+    (25) Params_1 -> Var_decls Params_2 .
+
+    RPARENTHESE     reduce using rule 25 (Params_1 -> Var_decls Params_2 .)
+
+
+state 63
+
+    (27) Params_2 -> SEMICOLON . Var_decls Params_2
+    (29) Var_decls -> . Var_id Var_decls_1 COLON Type_expr Var_decls_2 Var_decls_3 Var_decls_4
+    (32) Var_id -> . Var_id_1 Var_id_2 LV6ID
+    (33) Var_id_1 -> . CLOCK
+    (34) Var_id_1 -> . empty
+    (72) empty -> .
+
+    CLOCK           shift and go to state 52
+    PROBE           reduce using rule 72 (empty -> .)
+    LV6ID           reduce using rule 72 (empty -> .)
+
+    Var_decls                      shift and go to state 84
+    Var_id                         shift and go to state 50
+    Var_id_1                       shift and go to state 51
+    empty                          shift and go to state 85
+
+state 64
+
+    (28) Params_2 -> empty .
+
+    RPARENTHESE     reduce using rule 28 (Params_2 -> empty .)
+
+
+state 65
+
+    (29) Var_decls -> Var_id Var_decls_1 . COLON Type_expr Var_decls_2 Var_decls_3 Var_decls_4
+
+    COLON           shift and go to state 86
+
+
+state 66
+
+    (30) Var_decls_1 -> COMMA . Var_id Var_decls_1
+    (32) Var_id -> . Var_id_1 Var_id_2 LV6ID
+    (33) Var_id_1 -> . CLOCK
+    (34) Var_id_1 -> . empty
+    (72) empty -> .
+
+    CLOCK           shift and go to state 52
+    PROBE           reduce using rule 72 (empty -> .)
+    LV6ID           reduce using rule 72 (empty -> .)
+
+    Var_id                         shift and go to state 87
+    Var_id_1                       shift and go to state 51
+    empty                          shift and go to state 85
+
+state 67
+
+    (31) Var_decls_1 -> empty .
+
+    COLON           reduce using rule 31 (Var_decls_1 -> empty .)
+
+
+state 68
+
+    (32) Var_id -> Var_id_1 Var_id_2 . LV6ID
+
+    LV6ID           shift and go to state 88
+
+
+state 69
+
+    (35) Var_id_2 -> PROBE .
+
+    LV6ID           reduce using rule 35 (Var_id_2 -> PROBE .)
+
+
+state 70
+
+    (36) Var_id_2 -> empty .
+
+    LV6ID           reduce using rule 36 (Var_id_2 -> empty .)
+
+
+state 71
+
+    (57) Arith_expr -> Expr Bin_arith_op . Expr
+    (55) Expr -> . Atom
+    (56) Expr -> . Arith_expr
+    (68) Atom -> . Bool_atom
+    (69) Atom -> . INTCONST
+    (57) Arith_expr -> . Expr Bin_arith_op Expr
+    (70) Bool_atom -> . TRUE
+    (71) Bool_atom -> . FALSE
+
+    INTCONST        shift and go to state 57
+    TRUE            shift and go to state 58
+    FALSE           shift and go to state 59
+
+    Expr                           shift and go to state 89
+    Atom                           shift and go to state 54
+    Arith_expr                     shift and go to state 55
+    Bool_atom                      shift and go to state 56
+
+state 72
+
+    (58) Bin_arith_op -> PLUS .
+
+    INTCONST        reduce using rule 58 (Bin_arith_op -> PLUS .)
+    TRUE            reduce using rule 58 (Bin_arith_op -> PLUS .)
+    FALSE           reduce using rule 58 (Bin_arith_op -> PLUS .)
+
+
+state 73
+
+    (59) Bin_arith_op -> MINUS .
+
+    INTCONST        reduce using rule 59 (Bin_arith_op -> MINUS .)
+    TRUE            reduce using rule 59 (Bin_arith_op -> MINUS .)
+    FALSE           reduce using rule 59 (Bin_arith_op -> MINUS .)
+
+
+state 74
+
+    (60) Bin_arith_op -> STAR .
+
+    INTCONST        reduce using rule 60 (Bin_arith_op -> STAR .)
+    TRUE            reduce using rule 60 (Bin_arith_op -> STAR .)
+    FALSE           reduce using rule 60 (Bin_arith_op -> STAR .)
+
+
+state 75
+
+    (61) Bin_arith_op -> DIVIDE .
+
+    INTCONST        reduce using rule 61 (Bin_arith_op -> DIVIDE .)
+    TRUE            reduce using rule 61 (Bin_arith_op -> DIVIDE .)
+    FALSE           reduce using rule 61 (Bin_arith_op -> DIVIDE .)
+
+
+state 76
+
+    (62) Bin_arith_op -> MOD .
+
+    INTCONST        reduce using rule 62 (Bin_arith_op -> MOD .)
+    TRUE            reduce using rule 62 (Bin_arith_op -> MOD .)
+    FALSE           reduce using rule 62 (Bin_arith_op -> MOD .)
+
+
+state 77
+
+    (63) Bin_arith_op -> LAND .
+
+    INTCONST        reduce using rule 63 (Bin_arith_op -> LAND .)
+    TRUE            reduce using rule 63 (Bin_arith_op -> LAND .)
+    FALSE           reduce using rule 63 (Bin_arith_op -> LAND .)
+
+
+state 78
+
+    (64) Bin_arith_op -> LOR .
+
+    INTCONST        reduce using rule 64 (Bin_arith_op -> LOR .)
+    TRUE            reduce using rule 64 (Bin_arith_op -> LOR .)
+    FALSE           reduce using rule 64 (Bin_arith_op -> LOR .)
+
+
+state 79
+
+    (65) Bin_arith_op -> LXOR .
+
+    INTCONST        reduce using rule 65 (Bin_arith_op -> LXOR .)
+    TRUE            reduce using rule 65 (Bin_arith_op -> LXOR .)
+    FALSE           reduce using rule 65 (Bin_arith_op -> LXOR .)
+
+
+state 80
+
+    (66) Bin_arith_op -> LSL .
+
+    INTCONST        reduce using rule 66 (Bin_arith_op -> LSL .)
+    TRUE            reduce using rule 66 (Bin_arith_op -> LSL .)
+    FALSE           reduce using rule 66 (Bin_arith_op -> LSL .)
+
+
+state 81
+
+    (67) Bin_arith_op -> LSR .
+
+    INTCONST        reduce using rule 67 (Bin_arith_op -> LSR .)
+    TRUE            reduce using rule 67 (Bin_arith_op -> LSR .)
+    FALSE           reduce using rule 67 (Bin_arith_op -> LSR .)
+
+
+state 82
+
+    (8) User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 . User_op_decl_3 Opt_body
+    (23) User_op_decl_3 -> . empty
+    (72) empty -> .
+
+    SEMICOLON       reduce using rule 72 (empty -> .)
+    LPARENTHESE     reduce using rule 72 (empty -> .)
+    LV6ID           reduce using rule 72 (empty -> .)
+
+    User_op_decl_3                 shift and go to state 90
+    empty                          shift and go to state 91
+
+state 83
+
+    (22) User_op_decl_2 -> empty .
+
+    SEMICOLON       reduce using rule 22 (User_op_decl_2 -> empty .)
+    LPARENTHESE     reduce using rule 22 (User_op_decl_2 -> empty .)
+    LV6ID           reduce using rule 22 (User_op_decl_2 -> empty .)
+
+
+state 84
+
+    (27) Params_2 -> SEMICOLON Var_decls . Params_2
+    (27) Params_2 -> . SEMICOLON Var_decls Params_2
+    (28) Params_2 -> . empty
+    (72) empty -> .
+
+    SEMICOLON       shift and go to state 63
+    RPARENTHESE     reduce using rule 72 (empty -> .)
+
+    Params_2                       shift and go to state 92
+    empty                          shift and go to state 64
+
+state 85
+
+    (34) Var_id_1 -> empty .
+
+    PROBE           reduce using rule 34 (Var_id_1 -> empty .)
+    LV6ID           reduce using rule 34 (Var_id_1 -> empty .)
+
+
+state 86
+
+    (29) Var_decls -> Var_id Var_decls_1 COLON . Type_expr Var_decls_2 Var_decls_3 Var_decls_4
+    (52) Type_expr -> . BOOL
+    (53) Type_expr -> . INT32
+    (54) Type_expr -> . INT8
+
+    BOOL            shift and go to state 38
+    INT32           shift and go to state 39
+    INT8            shift and go to state 40
+
+    Type_expr                      shift and go to state 93
+
+state 87
+
+    (30) Var_decls_1 -> COMMA Var_id . Var_decls_1
+    (30) Var_decls_1 -> . COMMA Var_id Var_decls_1
+    (31) Var_decls_1 -> . empty
+    (72) empty -> .
+
+    COMMA           shift and go to state 66
+    COLON           reduce using rule 72 (empty -> .)
+
+    Var_decls_1                    shift and go to state 94
+    empty                          shift and go to state 67
+
+state 88
+
+    (32) Var_id -> Var_id_1 Var_id_2 LV6ID .
+
+    COMMA           reduce using rule 32 (Var_id -> Var_id_1 Var_id_2 LV6ID .)
+    COLON           reduce using rule 32 (Var_id -> Var_id_1 Var_id_2 LV6ID .)
+
+
+state 89
+
+    (57) Arith_expr -> Expr Bin_arith_op Expr .
+    (57) Arith_expr -> Expr . Bin_arith_op Expr
+    (58) Bin_arith_op -> . PLUS
+    (59) Bin_arith_op -> . MINUS
+    (60) Bin_arith_op -> . STAR
+    (61) Bin_arith_op -> . DIVIDE
+    (62) Bin_arith_op -> . MOD
+    (63) Bin_arith_op -> . LAND
+    (64) Bin_arith_op -> . LOR
+    (65) Bin_arith_op -> . LXOR
+    (66) Bin_arith_op -> . LSL
+    (67) Bin_arith_op -> . LSR
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for STAR resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for MOD resolved as shift
+  ! shift/reduce conflict for LAND resolved as shift
+  ! shift/reduce conflict for LOR resolved as shift
+  ! shift/reduce conflict for LXOR resolved as shift
+  ! shift/reduce conflict for LSL resolved as shift
+  ! shift/reduce conflict for LSR resolved as shift
+    SEMICOLON       reduce using rule 57 (Arith_expr -> Expr Bin_arith_op Expr .)
+    PLUS            shift and go to state 72
+    MINUS           shift and go to state 73
+    STAR            shift and go to state 74
+    DIVIDE          shift and go to state 75
+    MOD             shift and go to state 76
+    LAND            shift and go to state 77
+    LOR             shift and go to state 78
+    LXOR            shift and go to state 79
+    LSL             shift and go to state 80
+    LSR             shift and go to state 81
+
+  ! PLUS            [ reduce using rule 57 (Arith_expr -> Expr Bin_arith_op Expr .) ]
+  ! MINUS           [ reduce using rule 57 (Arith_expr -> Expr Bin_arith_op Expr .) ]
+  ! STAR            [ reduce using rule 57 (Arith_expr -> Expr Bin_arith_op Expr .) ]
+  ! DIVIDE          [ reduce using rule 57 (Arith_expr -> Expr Bin_arith_op Expr .) ]
+  ! MOD             [ reduce using rule 57 (Arith_expr -> Expr Bin_arith_op Expr .) ]
+  ! LAND            [ reduce using rule 57 (Arith_expr -> Expr Bin_arith_op Expr .) ]
+  ! LOR             [ reduce using rule 57 (Arith_expr -> Expr Bin_arith_op Expr .) ]
+  ! LXOR            [ reduce using rule 57 (Arith_expr -> Expr Bin_arith_op Expr .) ]
+  ! LSL             [ reduce using rule 57 (Arith_expr -> Expr Bin_arith_op Expr .) ]
+  ! LSR             [ reduce using rule 57 (Arith_expr -> Expr Bin_arith_op Expr .) ]
+
+    Bin_arith_op                   shift and go to state 71
+
+state 90
+
+    (8) User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 . Opt_body
+    (12) Opt_body -> . SEMICOLON
+    (13) Opt_body -> . Equation SEMICOLON
+    (14) Equation -> . Simple_equation
+    (15) Simple_equation -> . Lhs EQU Expr
+    (16) Lhs -> . LPARENTHESE RPARENTHESE
+    (17) Lhs -> . Lhs_id Lhs_1
+    (20) Lhs_id -> . LV6ID
+
+    SEMICOLON       shift and go to state 97
+    LPARENTHESE     shift and go to state 101
+    LV6ID           shift and go to state 95
+
+    Opt_body                       shift and go to state 96
+    Equation                       shift and go to state 98
+    Simple_equation                shift and go to state 99
+    Lhs                            shift and go to state 100
+    Lhs_id                         shift and go to state 102
+
+state 91
+
+    (23) User_op_decl_3 -> empty .
+
+    SEMICOLON       reduce using rule 23 (User_op_decl_3 -> empty .)
+    LPARENTHESE     reduce using rule 23 (User_op_decl_3 -> empty .)
+    LV6ID           reduce using rule 23 (User_op_decl_3 -> empty .)
+
+
+state 92
+
+    (27) Params_2 -> SEMICOLON Var_decls Params_2 .
+
+    RPARENTHESE     reduce using rule 27 (Params_2 -> SEMICOLON Var_decls Params_2 .)
+
+
+state 93
+
+    (29) Var_decls -> Var_id Var_decls_1 COLON Type_expr . Var_decls_2 Var_decls_3 Var_decls_4
+    (37) Var_decls_2 -> . empty
+    (72) empty -> .
+
+    SEMICOLON       reduce using rule 72 (empty -> .)
+    RPARENTHESE     reduce using rule 72 (empty -> .)
+
+    Var_decls_2                    shift and go to state 103
+    empty                          shift and go to state 104
+
+state 94
+
+    (30) Var_decls_1 -> COMMA Var_id Var_decls_1 .
+
+    COLON           reduce using rule 30 (Var_decls_1 -> COMMA Var_id Var_decls_1 .)
+
+
+state 95
+
+    (20) Lhs_id -> LV6ID .
+
+    COMMA           reduce using rule 20 (Lhs_id -> LV6ID .)
+    EQU             reduce using rule 20 (Lhs_id -> LV6ID .)
+
+
+state 96
+
+    (8) User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body .
+
+    CONST           reduce using rule 8 (User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body .)
+    PACKAGE         reduce using rule 8 (User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body .)
+    FUNCTION        reduce using rule 8 (User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body .)
+    NODE            reduce using rule 8 (User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body .)
+    $end            reduce using rule 8 (User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body .)
+    END             reduce using rule 8 (User_op_decl -> Op_kind Interface_status LV6ID User_op_decl_1 Params RETURNS Params User_op_decl_2 User_op_decl_3 Opt_body .)
+
+
+state 97
+
+    (12) Opt_body -> SEMICOLON .
+
+    CONST           reduce using rule 12 (Opt_body -> SEMICOLON .)
+    PACKAGE         reduce using rule 12 (Opt_body -> SEMICOLON .)
+    FUNCTION        reduce using rule 12 (Opt_body -> SEMICOLON .)
+    NODE            reduce using rule 12 (Opt_body -> SEMICOLON .)
+    $end            reduce using rule 12 (Opt_body -> SEMICOLON .)
+    END             reduce using rule 12 (Opt_body -> SEMICOLON .)
+
+
+state 98
+
+    (13) Opt_body -> Equation . SEMICOLON
+
+    SEMICOLON       shift and go to state 105
+
+
+state 99
+
+    (14) Equation -> Simple_equation .
+
+    SEMICOLON       reduce using rule 14 (Equation -> Simple_equation .)
+
+
+state 100
+
+    (15) Simple_equation -> Lhs . EQU Expr
+
+    EQU             shift and go to state 106
+
+
+state 101
+
+    (16) Lhs -> LPARENTHESE . RPARENTHESE
+
+    RPARENTHESE     shift and go to state 107
+
+
+state 102
+
+    (17) Lhs -> Lhs_id . Lhs_1
+    (18) Lhs_1 -> . COMMA Lhs_id Lhs_1
+    (19) Lhs_1 -> . empty
+    (72) empty -> .
+
+    COMMA           shift and go to state 109
+    EQU             reduce using rule 72 (empty -> .)
+
+    Lhs_1                          shift and go to state 108
+    empty                          shift and go to state 110
+
+state 103
+
+    (29) Var_decls -> Var_id Var_decls_1 COLON Type_expr Var_decls_2 . Var_decls_3 Var_decls_4
+    (38) Var_decls_3 -> . empty
+    (72) empty -> .
+
+    SEMICOLON       reduce using rule 72 (empty -> .)
+    RPARENTHESE     reduce using rule 72 (empty -> .)
+
+    Var_decls_3                    shift and go to state 111
+    empty                          shift and go to state 112
+
+state 104
+
+    (37) Var_decls_2 -> empty .
+
+    SEMICOLON       reduce using rule 37 (Var_decls_2 -> empty .)
+    RPARENTHESE     reduce using rule 37 (Var_decls_2 -> empty .)
+
+
+state 105
+
+    (13) Opt_body -> Equation SEMICOLON .
+
+    CONST           reduce using rule 13 (Opt_body -> Equation SEMICOLON .)
+    PACKAGE         reduce using rule 13 (Opt_body -> Equation SEMICOLON .)
+    FUNCTION        reduce using rule 13 (Opt_body -> Equation SEMICOLON .)
+    NODE            reduce using rule 13 (Opt_body -> Equation SEMICOLON .)
+    $end            reduce using rule 13 (Opt_body -> Equation SEMICOLON .)
+    END             reduce using rule 13 (Opt_body -> Equation SEMICOLON .)
+
+
+state 106
+
+    (15) Simple_equation -> Lhs EQU . Expr
+    (55) Expr -> . Atom
+    (56) Expr -> . Arith_expr
+    (68) Atom -> . Bool_atom
+    (69) Atom -> . INTCONST
+    (57) Arith_expr -> . Expr Bin_arith_op Expr
+    (70) Bool_atom -> . TRUE
+    (71) Bool_atom -> . FALSE
+
+    INTCONST        shift and go to state 57
+    TRUE            shift and go to state 58
+    FALSE           shift and go to state 59
+
+    Expr                           shift and go to state 113
+    Atom                           shift and go to state 54
+    Arith_expr                     shift and go to state 55
+    Bool_atom                      shift and go to state 56
+
+state 107
+
+    (16) Lhs -> LPARENTHESE RPARENTHESE .
+
+    EQU             reduce using rule 16 (Lhs -> LPARENTHESE RPARENTHESE .)
+
+
+state 108
+
+    (17) Lhs -> Lhs_id Lhs_1 .
+
+    EQU             reduce using rule 17 (Lhs -> Lhs_id Lhs_1 .)
+
+
+state 109
+
+    (18) Lhs_1 -> COMMA . Lhs_id Lhs_1
+    (20) Lhs_id -> . LV6ID
+
+    LV6ID           shift and go to state 95
+
+    Lhs_id                         shift and go to state 114
+
+state 110
+
+    (19) Lhs_1 -> empty .
+
+    EQU             reduce using rule 19 (Lhs_1 -> empty .)
+
+
+state 111
+
+    (29) Var_decls -> Var_id Var_decls_1 COLON Type_expr Var_decls_2 Var_decls_3 . Var_decls_4
+    (39) Var_decls_4 -> . empty
+    (72) empty -> .
+
+    SEMICOLON       reduce using rule 72 (empty -> .)
+    RPARENTHESE     reduce using rule 72 (empty -> .)
+
+    Var_decls_4                    shift and go to state 115
+    empty                          shift and go to state 116
+
+state 112
+
+    (38) Var_decls_3 -> empty .
+
+    SEMICOLON       reduce using rule 38 (Var_decls_3 -> empty .)
+    RPARENTHESE     reduce using rule 38 (Var_decls_3 -> empty .)
+
+
+state 113
+
+    (15) Simple_equation -> Lhs EQU Expr .
+    (57) Arith_expr -> Expr . Bin_arith_op Expr
+    (58) Bin_arith_op -> . PLUS
+    (59) Bin_arith_op -> . MINUS
+    (60) Bin_arith_op -> . STAR
+    (61) Bin_arith_op -> . DIVIDE
+    (62) Bin_arith_op -> . MOD
+    (63) Bin_arith_op -> . LAND
+    (64) Bin_arith_op -> . LOR
+    (65) Bin_arith_op -> . LXOR
+    (66) Bin_arith_op -> . LSL
+    (67) Bin_arith_op -> . LSR
+
+    SEMICOLON       reduce using rule 15 (Simple_equation -> Lhs EQU Expr .)
+    PLUS            shift and go to state 72
+    MINUS           shift and go to state 73
+    STAR            shift and go to state 74
+    DIVIDE          shift and go to state 75
+    MOD             shift and go to state 76
+    LAND            shift and go to state 77
+    LOR             shift and go to state 78
+    LXOR            shift and go to state 79
+    LSL             shift and go to state 80
+    LSR             shift and go to state 81
+
+    Bin_arith_op                   shift and go to state 71
+
+state 114
+
+    (18) Lhs_1 -> COMMA Lhs_id . Lhs_1
+    (18) Lhs_1 -> . COMMA Lhs_id Lhs_1
+    (19) Lhs_1 -> . empty
+    (72) empty -> .
+
+    COMMA           shift and go to state 109
+    EQU             reduce using rule 72 (empty -> .)
+
+    Lhs_1                          shift and go to state 117
+    empty                          shift and go to state 110
+
+state 115
+
+    (29) Var_decls -> Var_id Var_decls_1 COLON Type_expr Var_decls_2 Var_decls_3 Var_decls_4 .
+
+    SEMICOLON       reduce using rule 29 (Var_decls -> Var_id Var_decls_1 COLON Type_expr Var_decls_2 Var_decls_3 Var_decls_4 .)
+    RPARENTHESE     reduce using rule 29 (Var_decls -> Var_id Var_decls_1 COLON Type_expr Var_decls_2 Var_decls_3 Var_decls_4 .)
+
+
+state 116
+
+    (39) Var_decls_4 -> empty .
+
+    SEMICOLON       reduce using rule 39 (Var_decls_4 -> empty .)
+    RPARENTHESE     reduce using rule 39 (Var_decls_4 -> empty .)
+
+
+state 117
+
+    (18) Lhs_1 -> COMMA Lhs_id Lhs_1 .
+
+    EQU             reduce using rule 18 (Lhs_1 -> COMMA Lhs_id Lhs_1 .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for CONST in state 0 resolved as shift
+WARNING: shift/reduce conflict for PACKAGE in state 0 resolved as shift
+WARNING: shift/reduce conflict for FUNCTION in state 0 resolved as shift
+WARNING: shift/reduce conflict for NODE in state 0 resolved as shift
+WARNING: shift/reduce conflict for CONST in state 3 resolved as shift
+WARNING: shift/reduce conflict for PACKAGE in state 3 resolved as shift
+WARNING: shift/reduce conflict for FUNCTION in state 3 resolved as shift
+WARNING: shift/reduce conflict for NODE in state 3 resolved as shift
+WARNING: shift/reduce conflict for CONST in state 24 resolved as shift
+WARNING: shift/reduce conflict for CONST in state 28 resolved as shift
+WARNING: shift/reduce conflict for PACKAGE in state 28 resolved as shift
+WARNING: shift/reduce conflict for FUNCTION in state 28 resolved as shift
+WARNING: shift/reduce conflict for NODE in state 28 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 89 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 89 resolved as shift
+WARNING: shift/reduce conflict for STAR in state 89 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 89 resolved as shift
+WARNING: shift/reduce conflict for MOD in state 89 resolved as shift
+WARNING: shift/reduce conflict for LAND in state 89 resolved as shift
+WARNING: shift/reduce conflict for LOR in state 89 resolved as shift
+WARNING: shift/reduce conflict for LXOR in state 89 resolved as shift
+WARNING: shift/reduce conflict for LSL in state 89 resolved as shift
+WARNING: shift/reduce conflict for LSR in state 89 resolved as shift
+WARNING: reduce/reduce conflict in state 4 resolved using rule (Decls_zero_or_mode -> empty)
+WARNING: rejected rule (Const_block -> empty) in state 4
