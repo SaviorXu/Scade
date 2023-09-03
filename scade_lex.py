@@ -2,7 +2,7 @@ import ply.lex as lex
 import sys
 
 class lex_value:
-    def __init__(self, strs = None, value = None, Type = None) -> None:
+    def __init__(self, strs = "", value = "", Type = "") -> None:
         self.strs = strs
         self.value = value
         self.type = Type

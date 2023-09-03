@@ -27,6 +27,7 @@ class Scade_generate:
                         content+="(kcg_lit_"+v.Type+"("+str(v.Value)+"))"
                     content+="\n"
         content+="\n\n#endif"
+        print(content)
         with open('./output/kcg_const.h','w') as f:
             f.write(content)
 
